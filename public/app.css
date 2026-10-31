@@ -311,3 +311,5 @@ th.n { font-family: var(--font-ui); }
 td.alerts { white-space: normal; min-width: 170px; }
 td.alerts .chip { margin: 2px 4px 2px 0; }
 th, td { padding: 9px 10px; }
+.wrap.wide { max-width: 1680px; }
+body.admin .band-inner { max-width: 1680px; }

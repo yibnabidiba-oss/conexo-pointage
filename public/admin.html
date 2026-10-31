@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/app.css">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 </head>
-<body>
+<body class="admin">
   <header class="band">
     <div class="band-inner">
       <div class="brand"><b id="centre">Conexo</b><span>Encadrement · heures de log</span></div>
@@ -52,7 +52,7 @@
   </main>
 
   <!-- Application -->
-  <main class="wrap" id="view-app" hidden>
+  <main class="wrap wide" id="view-app" hidden>
     <div class="panel-head">
       <nav class="tabs" role="tablist" id="tabs">
         <button role="tab" data-tab="live" aria-selected="true" type="button">En direct</button>
@@ -111,8 +111,8 @@
             <thead><tr>
               <th>Conseiller</th><th>Activité</th><th class="n">Jours</th><th class="n">Absences</th>
               <th class="n">Heures de log</th><th class="n">Prévu</th><th class="n">Production</th><th class="n">Pauses</th>
-              <th class="n">Dépass. pause</th><th class="n">Déjeuner</th><th class="n">Brief</th><th class="n">Retards</th>
-              <th class="n">Départs anticipés</th><th class="n">Oublis déconnexion</th><th class="n">Adhérence</th>
+              <th class="n" title="Dépassement de la pause autorisée">Dépass.</th><th class="n">Déjeuner</th><th class="n">Brief</th><th class="n">Retards</th>
+              <th class="n" title="Départs anticipés">Départs tôt</th><th class="n" title="Oublis de déconnexion">Oublis</th><th class="n">Adhérence</th>
             </tr></thead>
             <tbody id="rep-body"><tr><td colspan="15" class="empty">Choisissez une période.</td></tr></tbody>
           </table>
