@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pointage Conexo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/app.css">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <header class="band">
+    <div class="band-inner">
+      <div class="brand"><b id="centre">Conexo</b><span>Pointage conseiller</span></div>
+      <div class="clock" aria-live="off">
+        <div class="time" id="clock-time">--:--:--</div>
+        <div class="date" id="clock-date"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Connexion -->
+  <main class="wrap narrow" id="view-login" hidden>
+    <form class="panel" id="login-form" autocomplete="off">
+      <div>
+        <h2>Ouvrir ma session</h2>
+        <p class="muted small">Votre matricule et votre code PIN vous sont remis par votre superviseur.</p>
+      </div>
+      <label class="field"><span>Matricule</span>
+        <input id="login-matricule" name="matricule" required autocapitalize="characters" spellcheck="false">
+      </label>
+      <label class="field"><span>Code PIN</span>
+        <input id="login-pin" name="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" required>
+      </label>
+      <div id="login-msg" class="msg err" hidden></div>
+      <button class="primary" type="submit" id="login-btn">Ouvrir ma session</button>
+    </form>
+    <p class="muted small" style="text-align:center">Encadrement : <a href="/encadrement">espace superviseurs</a></p>
+  </main>
+
+  <!-- Session conseiller -->
+  <main class="wrap" id="view-session" hidden>
+    <div class="who">
+      <div>
+        <h1 id="who-name"></h1>
+        <p class="muted" id="who-meta"></p>
+      </div>
+      <button class="ghost" id="lock-btn" type="button">Fermer ma session sur ce poste</button>
+    </div>
+
+    <section class="status-hero st-off" id="hero">
+      <div>
+        <div class="now-label">Statut actuel</div>
+        <div class="now-status" id="hero-status">Déconnecté</div>
+        <div class="since" id="hero-since"></div>
+      </div>
+      <div class="elapsed" id="hero-elapsed">0:00:00</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Changer de statut</h2>
+        <span class="muted small">L'heure enregistrée est celle du serveur.</span>
+      </div>
+      <div class="actions" id="actions">
+        <button class="act st-production" data-statut="production" type="button"><span class="t">Production</span><span class="h">En ligne, appels</span></button>
+        <button class="act st-pause" data-statut="pause" type="button"><span class="t">Pause</span><span class="h">Pause courte</span></button>
+        <button class="act st-dejeuner" data-statut="dejeuner" type="button"><span class="t">Déjeuner</span><span class="h">Non compté dans les heures</span></button>
+        <button class="act st-brief" data-statut="brief" type="button"><span class="t">Brief / formation</span><span class="h">Réunion, coaching</span></button>
+        <button class="act end" data-statut="off" type="button"><span class="t">Fin de journée</span><span class="h">Déconnexion</span></button>
+      </div>
+      <div class="confirm-bar" id="confirm-off" hidden>
+        <span>Terminer votre journée maintenant ?</span>
+        <button class="primary" id="confirm-off-yes" type="button">Oui, je termine</button>
+        <button id="confirm-off-no" type="button">Annuler</button>
+      </div>
+      <div id="action-msg" class="msg" hidden></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Ma journée</h2>
+        <span class="muted small" id="plan-line"></span>
+      </div>
+      <div class="stats" id="day-stats"></div>
+      <div id="day-timeline"></div>
+    </section>
+  </main>
+
+  <script src="/common.js"></script>
+  <script src="/agent.js"></script>
+</body>
+</html>

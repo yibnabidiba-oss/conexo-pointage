@@ -1,0 +1,15 @@
+{
+  "name": "conexo-pointage",
+  "version": "1.0.0",
+  "description": "Pointage des heures de log des conseillers Conexo : connexion matricule + PIN, statuts, suivi encadrement, adhérence au planning, export Excel.",
+  "private": true,
+  "main": "server.js",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server.js",
+    "test": "node --disable-warning=ExperimentalWarning --test test/calc.test.js"
+  },
+  "license": "UNLICENSED"
+}

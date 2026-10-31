@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Encadrement Conexo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/app.css">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <header class="band">
+    <div class="band-inner">
+      <div class="brand"><b id="centre">Conexo</b><span>Encadrement · heures de log</span></div>
+      <div class="clock">
+        <div class="time" id="clock-time">--:--:--</div>
+        <div class="date" id="clock-date"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Premier lancement : création du compte administrateur -->
+  <main class="wrap narrow" id="view-setup" hidden>
+    <form class="panel" id="setup-form">
+      <div>
+        <h2>Premier lancement</h2>
+        <p class="muted small">Créez le compte administrateur. Il pourra ensuite ajouter les superviseurs et les conseillers.</p>
+      </div>
+      <label class="field"><span>Votre nom</span><input id="setup-nom" required></label>
+      <label class="field"><span>Identifiant</span><input id="setup-login" required autocapitalize="none" spellcheck="false" placeholder="ex. younes"></label>
+      <label class="field"><span>Mot de passe (8 caractères minimum)</span><input id="setup-password" type="password" minlength="8" required></label>
+      <div id="setup-msg" class="msg err" hidden></div>
+      <button class="primary" type="submit">Créer le compte</button>
+    </form>
+  </main>
+
+  <!-- Connexion encadrement -->
+  <main class="wrap narrow" id="view-login" hidden>
+    <form class="panel" id="login-form">
+      <div>
+        <h2>Espace encadrement</h2>
+        <p class="muted small">Superviseurs, team leaders, planning et direction.</p>
+      </div>
+      <label class="field"><span>Identifiant</span><input id="login-login" required autocapitalize="none" spellcheck="false"></label>
+      <label class="field"><span>Mot de passe</span><input id="login-password" type="password" required></label>
+      <div id="login-msg" class="msg err" hidden></div>
+      <button class="primary" type="submit">Se connecter</button>
+    </form>
+    <p class="muted small" style="text-align:center"><a href="/">Écran de pointage conseiller</a></p>
+  </main>
+
+  <!-- Application -->
+  <main class="wrap" id="view-app" hidden>
+    <div class="panel-head">
+      <nav class="tabs" role="tablist" id="tabs">
+        <button role="tab" data-tab="live" aria-selected="true" type="button">En direct</button>
+        <button role="tab" data-tab="report" aria-selected="false" type="button">Heures et adhérence</button>
+        <button role="tab" data-tab="day" aria-selected="false" type="button">Corrections</button>
+        <button role="tab" data-tab="agents" aria-selected="false" type="button">Conseillers</button>
+        <button role="tab" data-tab="settings" aria-selected="false" type="button">Paramètres</button>
+      </nav>
+      <div class="row" style="align-items:center">
+        <span class="muted small" id="me-line"></span>
+        <button class="ghost small" id="logout-btn" type="button">Déconnexion</button>
+      </div>
+    </div>
+    <div id="app-msg" class="msg" hidden></div>
+
+    <!-- En direct -->
+    <section id="tab-live" class="tab">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Plateau en ce moment</h2>
+          <div class="row">
+            <label class="field"><span class="label">Activité</span><select id="live-activite"></select></label>
+          </div>
+        </div>
+        <div class="counters" id="live-counters"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Conseiller</th><th>Activité</th><th>Statut</th><th>Depuis</th><th>Horaire prévu</th><th>Arrivée</th>
+              <th class="n">Heures de log</th><th class="n">Production</th><th class="n">Pauses</th><th>Alertes</th>
+            </tr></thead>
+            <tbody id="live-body"><tr><td colspan="10" class="empty">Chargement…</td></tr></tbody>
+          </table>
+        </div>
+        <p class="muted small">Actualisé toutes les 30 secondes. Cliquez sur une ligne pour voir ou corriger la journée du conseiller.</p>
+      </div>
+    </section>
+
+    <!-- Rapports -->
+    <section id="tab-report" class="tab" hidden>
+      <div class="panel">
+        <div class="panel-head"><h2>Heures de log et adhérence au planning</h2></div>
+        <div class="row">
+          <label class="field"><span>Du</span><input type="date" id="rep-from"></label>
+          <label class="field"><span>Au</span><input type="date" id="rep-to"></label>
+          <label class="field"><span>Activité</span><select id="rep-activite"></select></label>
+          <button class="primary" id="rep-go" type="button">Afficher</button>
+        </div>
+        <div class="row" id="rep-presets"></div>
+        <div class="row">
+          <a class="btn small" id="rep-csv" href="#">Exporter le cumul (Excel)</a>
+          <a class="btn small" id="rep-csv-detail" href="#">Exporter le détail par jour (Excel)</a>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Conseiller</th><th>Activité</th><th class="n">Jours</th><th class="n">Absences</th>
+              <th class="n">Heures de log</th><th class="n">Prévu</th><th class="n">Production</th><th class="n">Pauses</th>
+              <th class="n">Dépass. pause</th><th class="n">Déjeuner</th><th class="n">Brief</th><th class="n">Retards</th>
+              <th class="n">Départs anticipés</th><th class="n">Oublis déconnexion</th><th class="n">Adhérence</th>
+            </tr></thead>
+            <tbody id="rep-body"><tr><td colspan="15" class="empty">Choisissez une période.</td></tr></tbody>
+          </table>
+        </div>
+        <p class="muted small" id="rep-note"></p>
+      </div>
+    </section>
+
+    <!-- Corrections -->
+    <section id="tab-day" class="tab" hidden>
+      <div class="panel">
+        <div class="panel-head"><h2>Journée d'un conseiller</h2></div>
+        <div class="row">
+          <label class="field"><span>Conseiller</span><select id="day-agent"></select></label>
+          <label class="field"><span>Date</span><input type="date" id="day-date"></label>
+          <button class="primary" id="day-go" type="button">Afficher</button>
+        </div>
+        <div id="day-content"></div>
+      </div>
+    </section>
+
+    <!-- Conseillers -->
+    <section id="tab-agents" class="tab" hidden>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Conseillers</h2>
+          <div class="row">
+            <button class="primary" id="agent-new" type="button">Ajouter un conseiller</button>
+            <button id="agent-import-open" type="button">Import en masse</button>
+          </div>
+        </div>
+        <form class="panel" id="agent-form" hidden></form>
+        <div class="panel" id="agent-import" hidden>
+          <h3>Import en masse</h3>
+          <p class="muted small">Une ligne par conseiller : <span class="num">matricule;nom;prénom;activité;PIN</span>. L'horaire de la semaine se règle ensuite pour chacun, ou avec le modèle ci-dessous.</p>
+          <textarea id="import-text" placeholder="C001;Alaoui;Mona;B2C Belgique;4821&#10;C002;Bennani;Amine;B2C Belgique;7310"></textarea>
+          <div class="row">
+            <label class="field"><span>Horaire appliqué du lundi au vendredi</span>
+              <span class="row"><input type="time" id="import-debut" value="09:00"><input type="time" id="import-fin" value="18:00"></span>
+            </label>
+            <label class="field"><span>Déjeuner (min)</span><input type="number" id="import-dej" value="60" min="0" max="240"></label>
+          </div>
+          <div class="row">
+            <button class="primary" id="import-go" type="button">Importer</button>
+            <button id="import-cancel" type="button">Annuler</button>
+          </div>
+          <div id="import-msg" class="msg" hidden></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Matricule</th><th>Nom</th><th>Activité</th><th>Horaire type</th><th>État</th><th></th></tr></thead>
+            <tbody id="agents-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Paramètres -->
+    <section id="tab-settings" class="tab" hidden>
+      <div class="grid-2">
+        <form class="panel" id="settings-form">
+          <h2>Règles de calcul</h2>
+          <label class="field"><span>Nom du centre</span><input id="set-nom"></label>
+          <label class="field"><span>Tolérance de retard (minutes)</span><input type="number" id="set-tol" min="0" max="60"></label>
+          <label class="field"><span>Pause autorisée par jour (minutes, hors déjeuner)</span><input type="number" id="set-pause" min="0" max="180"></label>
+          <label class="field"><span>Activités (séparées par des virgules)</span><input id="set-activites"></label>
+          <div id="settings-msg" class="msg" hidden></div>
+          <button class="primary" type="submit">Enregistrer</button>
+        </form>
+        <form class="panel" id="password-form">
+          <h2>Mon mot de passe</h2>
+          <label class="field"><span>Mot de passe actuel</span><input type="password" id="pw-old" required></label>
+          <label class="field"><span>Nouveau mot de passe</span><input type="password" id="pw-new" minlength="8" required></label>
+          <div id="pw-msg" class="msg" hidden></div>
+          <button class="primary" type="submit">Changer</button>
+        </form>
+      </div>
+      <div class="panel admin-only">
+        <div class="panel-head"><h2>Comptes encadrement</h2></div>
+        <form class="row" id="manager-form">
+          <label class="field"><span>Nom</span><input id="mg-nom" required></label>
+          <label class="field"><span>Identifiant</span><input id="mg-login" required autocapitalize="none"></label>
+          <label class="field"><span>Mot de passe</span><input id="mg-password" type="password" minlength="8" required></label>
+          <label class="field"><span>Rôle</span>
+            <select id="mg-role"><option value="superviseur">Superviseur</option><option value="admin">Administrateur</option></select>
+          </label>
+          <button class="primary" type="submit">Ajouter</button>
+        </form>
+        <div id="manager-msg" class="msg" hidden></div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Nom</th><th>Identifiant</th><th>Rôle</th><th></th></tr></thead><tbody id="managers-body"></tbody></table>
+        </div>
+      </div>
+      <div class="panel admin-only">
+        <h2>Journal des modifications</h2>
+        <div class="table-wrap">
+          <table><thead><tr><th>Date</th><th>Par</th><th>Action</th><th>Détail</th></tr></thead><tbody id="audit-body"></tbody></table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/common.js"></script>
+  <script src="/admin.js"></script>
+</body>
+</html>
