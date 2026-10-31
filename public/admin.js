@@ -182,7 +182,7 @@ function renderLive() {
       <td class="n">${fmtHM(j.heures_log_min)}</td>
       <td class="n">${fmtHM(j.production_min)}</td>
       <td class="n">${j.pause_min} min</td>
-      <td>${alertsFor(j, pauseMax)}</td>
+      <td class="alerts">${alertsFor(j, pauseMax)}</td>
     </tr>`).join('');
 }
 $('#live-activite').addEventListener('change', () => liveData && renderLive());

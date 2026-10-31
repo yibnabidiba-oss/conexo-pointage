@@ -90,7 +90,7 @@ a { color: var(--accent); }
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 .band-inner {
-  max-width: 1180px;
+  max-width: 1280px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -106,7 +106,7 @@ a { color: var(--accent); }
 .clock .date { font-size: 0.8rem; opacity: 0.75; text-transform: capitalize; }
 
 .wrap {
-  max-width: 1180px;
+  max-width: 1280px;
   margin: 0 auto;
   padding-block: 24px 48px;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
@@ -308,3 +308,6 @@ tr.sub td { background: var(--surface-2); font-size: 0.82rem; }
 th.n { font-family: var(--font-ui); }
 #day-content { display: grid; gap: 14px; min-width: 0; }
 #day-content > h3 { margin-top: 6px; }
+td.alerts { white-space: normal; min-width: 170px; }
+td.alerts .chip { margin: 2px 4px 2px 0; }
+th, td { padding: 9px 10px; }
